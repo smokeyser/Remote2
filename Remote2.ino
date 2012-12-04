@@ -151,7 +151,7 @@ void goToSleep() {
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 
 	// Attach the interrupt to the analog button pin
-	// using the PinChangeInt library
+	// using the PinChangeInt library.
 	PCintPort::attachInterrupt(buttonPin, &intCode, RISING);
 
 	sleep_cpu();
