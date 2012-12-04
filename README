@@ -3,3 +3,8 @@ online that included multiple buttons and both raw and encoded
 codes, so I decided to toss this on the net in case someone else
 wants to try making their own universal remote.  See Remote2.ino
 for more details.
+
+Note that if you're not using Visual Micro to work on arduino
+projects in visual studio, you only need Remote2.ino and Codes.h.
+There's a modified version of Ladyada's rawirdecode app in contrib
+for convenience.
