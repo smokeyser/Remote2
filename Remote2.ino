@@ -10,7 +10,6 @@ conserve battery power.  Pgmspace is for storing variables
 in flash.  */
 #include <avr/sleep.h>
 #include <IRremote.h>
-#include <avr/pgmspace.h>
 #include "Codes.h"
 #include <PinChangeInt.h>
 
@@ -110,7 +109,7 @@ void getButton() {
 		case BUTTON1:
 			// Note that the size of raw pulses are calculated as
 			// sizeof(arrayname) / sizeof(datatype)
-			sendRawPulses(sonyPower, sizeof(sonyPower) / sizeof(uint16_t));
+			sendRawPulses(yamahaPwr, sizeof(yamahaPwr) / sizeof(uint16_t));
 			break;
 		case BUTTON2:
 			// Yamaha Volume Up using NEC code from the IRremote lib
@@ -127,7 +126,7 @@ void getButton() {
 		Debouncing is skipped because the interrupt
 		is disabled as soon as a button press is detected,
 		and debouncing was causing issues.  */
-		delay(100);
+		delay(250);
 
 		// Check if the button is being held down
 		btnReading = analogRead(buttonPin);
