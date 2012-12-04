@@ -1,1 +1,5 @@
-Simple universal remote control.  See Remote2.ino for details.
+Simple universal remote control.  I couldn't find any examples
+online that included multiple buttons and both raw and encoded
+codes, so I decided to toss this on the net in case someone else
+wants to try making their own universal remote.  See Remote2.ino
+for more details.
