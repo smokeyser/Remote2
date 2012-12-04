@@ -1,0 +1,9 @@
+<VisualMicro>
+  <Program Name="Remote2" Ext=".ino" Location="C:\Users\Josh\Documents\Arduino\Remote2">
+    <Compile IsCompiled="0" CompilerErrors="0" ConfigurationName="Debug" StopOnError="False" OptimiseLibs="True" OptimiseCore="True" BuildPath="C:\Users\Josh\AppData\Local\VMicro\Arduino\Builds\Remote2\uno" />
+    <Platform Name="Arduino">
+      <Board Name="uno" Description="Arduino Uno" CoreFolder="C:\arduino\hardware\arduino\cores\arduino" VariantFullPath="C:\arduino\hardware\arduino\variants\standard" />
+    </Platform>
+    <Debug />
+  </Program>
+</VisualMicro>
