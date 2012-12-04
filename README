@@ -2,9 +2,11 @@ Simple universal remote control.  I couldn't find any examples
 online that included multiple buttons and both raw and encoded
 codes, so I decided to toss this on the net in case someone else
 wants to try making their own universal remote.  See Remote2.ino
-for more details.
+for more details, and Remote2_Fritzing.fzz for a Fritzing model
+showing how I wired it up on a breadboard.
 
 Note that if you're not using Visual Micro to work on arduino
 projects in visual studio, you only need Remote2.ino and Codes.h.
 There's a modified version of Ladyada's rawirdecode app in contrib
 for convenience.
+
