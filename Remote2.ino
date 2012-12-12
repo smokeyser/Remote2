@@ -45,11 +45,10 @@ int buttonState;
 int btnReading = 0;
 
 int ledpin = 13;
-int a = ledpin;
 
 // Uncomment for some extra output via serial
 // This makes the app almost 2 kb bigger
-// #define DEBUGGING
+#define DEBUGGING
 
 void setup()
 {
@@ -81,7 +80,7 @@ void sendRawPulses(uint16_t *pulses, uint16_t pulseLength) {
 	Serial.println(" pulses");
 #endif
 	// sendRaw(array containing pulses, size of the array, frequency)
-	irsend.sendRaw(pulses, pulseLength, 38);
+	irsend.sendRaw(pulses, pulseLength, 39);
 }
 
 void getButton() {
@@ -107,13 +106,14 @@ void getButton() {
 		// Do stuff with that state
 		switch (buttonState) {
 		case BUTTON1:
-			// Note that the size of raw pulses are calculated as
-			// sizeof(arrayname) / sizeof(datatype)
-			sendRawPulses(yamahaPwr, sizeof(yamahaPwr) / sizeof(uint16_t));
+			// Note that the size of raw pulses (and arrays in general)
+			// are calculated as sizeof(arrayname) / sizeof(datatype).
+			sendRawPulses(cblPower, sizeof(cblPower) / sizeof(uint16_t));
+			// delay(500);
 			break;
 		case BUTTON2:
 			// Yamaha Volume Up using NEC code from the IRremote lib
-			// size here is just code size (in bytes) * 8 bits per byte
+			// size here is just code size (in bytes) * 8 bits per byte.
 			irsend.sendNEC(yvup, sizeof(yvup) * 8);
 			break;
 		case BUTTON3:
@@ -126,7 +126,7 @@ void getButton() {
 		Debouncing is skipped because the interrupt
 		is disabled as soon as a button press is detected,
 		and debouncing was causing issues.  */
-		delay(250);
+		delay(100);
 
 		// Check if the button is being held down
 		btnReading = analogRead(buttonPin);
