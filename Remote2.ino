@@ -21,33 +21,39 @@ IRsend irsend;
 #define NO_PORTB_PINCHANGES
 #define NO_PORTD_PINCHANGES
 
-// Number the buttons so we can work with them
-const int BUTTON1 = 1;
-const int BUTTON2 = 2;
-const int BUTTON3 = 3;
-
 /* High/low values to use for button press detection
 Buttons wired according to:
 http://www.instructables.com/id/How-to-access-5-buttons-through-1-Arduino-input
 Each button in my testing only had a possible range of about 3 values,
 but I gave them 10 just to allow for a little circuit noise.
-This means it's possible to have quite a few buttons on a single analog pin. */
-const int BUTTON1LOW = 925;
-const int BUTTON1HIGH = 935;
-const int BUTTON2LOW = 885;
-const int BUTTON2HIGH = 895;
-const int BUTTON3LOW = 835;
-const int BUTTON3HIGH = 845;
+This means it's possible to have quite a few buttons on a single analog pin.
+To get these values just wire up the buttons, run analogRead, and record the results.
+I used the value read +/- 1 to leave a little room for interference.  */
+const int BUTTON1LOW = 735;
+const int BUTTON1HIGH = 737;
+const int BUTTON2LOW = 804;
+const int BUTTON2HIGH = 806;
+const int BUTTON3LOW = 836;
+const int BUTTON3HIGH = 838;
+const int BUTTON4LOW = 929;
+const int BUTTON4HIGH = 931;
+const int BUTTON5LOW = 973;
+const int BUTTON5HIGH = 975;
+const int BUTTON6LOW = 977;
+const int BUTTON6HIGH = 979;
+const int BUTTON7LOW = 990;
+const int BUTTON7HIGH = 992;
+const int BUTTON8LOW = 1001;
+const int BUTTON8HIGH = 1003;
 
-// This is where we store which button has been pressed
-int buttonState;
 // Analog reading of the button pin
 int btnReading = 0;
 
-int ledpin = 13;
+// Should be self explanitory
+int statusLED = 13;
 
 // Uncomment for some extra output via serial
-// This makes the app almost 2 kb bigger
+// This makes the app around 500 bytes bigger
 #define DEBUGGING
 
 void setup()
@@ -90,36 +96,47 @@ void getButton() {
 	// see which one was pressed and set buttonState accordingly.
 	// If the reading is < 10 assume it's just noise.
 	while (btnReading > 10) {
-		if (btnReading > BUTTON3LOW && btnReading < BUTTON3HIGH) {
-			buttonState = BUTTON3;
+		if (btnReading > BUTTON1LOW && btnReading < BUTTON1HIGH) {
+			Serial.println(sizeof(cblPower));
+			sendRawPulses(cblPower, sizeof(cblPower) / sizeof(uint16_t));
+			statusFlash();
+			delay(500);
 		}
 		else if (btnReading > BUTTON2LOW && btnReading < BUTTON2HIGH) {
-			buttonState = BUTTON2;
+			irsend.sendRaw(sonyPower, sizeof(sonyPower) / sizeof(uint16_t), 38);
+			statusFlash();
+			delay(500);
 		}
-		else if (btnReading > BUTTON1LOW && btnReading < BUTTON1HIGH) {
-			buttonState = BUTTON1;
+		else if (btnReading > BUTTON3LOW && btnReading < BUTTON3HIGH) {
+			irsend.sendNEC(yvup, sizeof(yvdown) * 8);
+			statusFlash();
+		}
+		else if (btnReading > BUTTON4LOW && btnReading < BUTTON4HIGH) {
+			irsend.sendNEC(yvdown, sizeof(yvup) * 8);
+			statusFlash();
+		}
+		else if (btnReading > BUTTON5LOW && btnReading < BUTTON5HIGH) {
+			irsend.sendNEC(ydvd, sizeof(ydvd) * 8);
+			statusFlash();
+		}
+		else if (btnReading > BUTTON6LOW && btnReading < BUTTON6HIGH) {
+			irsend.sendNEC(ycbl, sizeof(ycbl) * 8);
+			statusFlash();
+		}
+		else if (btnReading > BUTTON7LOW && btnReading < BUTTON7HIGH) {
+			irsend.sendNEC(yvcr, sizeof(yvcr) * 8);
+			statusFlash();
+		}
+		else if (btnReading > BUTTON8LOW && btnReading < BUTTON8HIGH) {
+			irsend.sendNEC(yaux, sizeof(yaux) * 8);
+			statusFlash();
 		}
 		else {
-			buttonState = LOW;
-		}
-
-		// Do stuff with that state
-		switch (buttonState) {
-		case BUTTON1:
-			// Note that the size of raw pulses (and arrays in general)
-			// are calculated as sizeof(arrayname) / sizeof(datatype).
-			sendRawPulses(cblPower, sizeof(cblPower) / sizeof(uint16_t));
-			// delay(500);
-			break;
-		case BUTTON2:
-			// Yamaha Volume Up using NEC code from the IRremote lib
-			// size here is just code size (in bytes) * 8 bits per byte.
-			irsend.sendNEC(yvup, sizeof(yvup) * 8);
-			break;
-		case BUTTON3:
-			// Yamaha Volume Down
-			irsend.sendNEC(yvdown, sizeof(yvdown) * 8);
-			break;
+			// This shouldn't happen, but lets deal with it just in case
+			// there's some signal noise or other interference.
+#ifdef DEBUGGING
+			Serial.println("Unknown button result");
+#endif
 		}
 
 		/* Delay so it doesn't repeat too fast.
@@ -157,4 +174,11 @@ void goToSleep() {
 
 	// *yawn* Wasn't that a nice nap?
 	sleep_disable();
+}
+
+void statusFlash() {
+	digitalWrite(statusLED, HIGH);
+	delay(125);
+	digitalWrite(statusLED, LOW);
+	delay(125);
 }
