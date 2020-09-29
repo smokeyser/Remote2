@@ -10,3 +10,5 @@ projects in visual studio, you only need Remote2.ino and Codes.h.
 There's a modified version of Ladyada's rawirdecode app in contrib
 for convenience.
 
+NOTE: This is a sample Pull Request and don't commit it
+
